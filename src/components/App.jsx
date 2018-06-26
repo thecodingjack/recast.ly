@@ -1,28 +1,20 @@
-// var App = () => (
-//   <div>
-//     <nav className="navbar">
-//       <div className="col-md-6 offset-md-3">
-//         <div><h5><em>search</em> view goes here</h5></div>
-//       </div>
-//     </nav>
-//     <div className="row">
-//       <div className="col-md-7">
-//         <div><h5><em>videoPlayer</em> view goes here</h5></div>
-//       </div>
-//       <div className="col-md-5">
-//         <div><h5><em>videoList</em> view goes here</h5></div>
-//       </div>
-//     </div>
-//   </div>
-// );
-//import React, { Component } from 'react';
 class App extends React.Component {
   constructor(props){
     super(props);
-    this.state = {videos: window.exampleVideoData,
-                  currentlyPlaying: window.exampleVideoData[0]
+    this.state = {videos: [],
+                  currentlyPlaying: {
+                    etag: '',
+                    id: {videoId: ''},
+                    snippet: {
+                      title: '',
+                      description: '',
+                      thumbnails: {default: {url: '',}}
+                    }
+                  }
                 };
     this.handleClick = this.handleClick.bind(this);
+    this.handleSearch = this.handleSearch.bind(this);
+    this.searchCallBack = this.searchCallBack.bind(this);
   }
 
   handleClick(video){
@@ -31,12 +23,30 @@ class App extends React.Component {
     })
   }
 
+  handleSearch(input){
+    this.props.searchYouTube({
+      key: window.YOUTUBE_API_KEY,
+      query: input,
+      max: 5,
+    },this.searchCallBack)
+  }
+
+  searchCallBack(dataItems){
+    this.setState({videos: dataItems,
+                  currentlyPlaying: dataItems[0]
+                })
+  }
+
+  componentDidMount(){
+    this.handleSearch('')
+  }
+
   render() {
     return (
       <div>
         <nav className="navbar">
           <div className="col-md-6 offset-md-3">
-            <Search/>
+            <Search handleSearch={this.handleSearch}/>
           </div>
         </nav>
         <div className="row">
@@ -52,7 +62,5 @@ class App extends React.Component {
   }
 }
 
-// In the ES6 spec, files are "modules" and do not share a top-level scope
-// `var` declarations will only exist globally where explicitly defined
 window.App = App;
-ReactDOM.render(<App/>, document.getElementById('app'));
+ReactDOM.render(<App searchYouTube={window.searchYouTube}/>, document.getElementById('app'));

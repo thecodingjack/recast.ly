@@ -4,7 +4,6 @@ var searchYouTube = (options, callback) => {
     type: 'GET',
     url: 'https://www.googleapis.com/youtube/v3/search',
     cache: false,
-    
     dataType: 'json',
     timeout: 2000,
     data: {
@@ -12,15 +11,14 @@ var searchYouTube = (options, callback) => {
       key: options.key,
       q: options.query,
       maxResults: options.max,
-      part: 'snippet'
+      part: 'snippet',
+      videoEmbeddable: true
     },
     success: function(data){
       console.log('success')
-      // callback(data)
     },
     error: function(error){
       console.log('error')
-      // callback(error)
     }
   }).done(function(data){
     callback(data.items)
