@@ -32,9 +32,7 @@ class App extends React.Component {
   }
 
   searchCallBack(dataItems){
-    this.setState({videos: dataItems,
-                  currentlyPlaying: dataItems[0]
-                })
+    this.setState({videos: dataItems,currentlyPlaying: dataItems[0]})
   }
 
   componentDidMount(){
@@ -63,4 +61,4 @@ class App extends React.Component {
 }
 
 window.App = App;
-ReactDOM.render(<App searchYouTube={window.searchYouTube}/>, document.getElementById('app'));
+
